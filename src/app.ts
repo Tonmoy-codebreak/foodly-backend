@@ -1,6 +1,7 @@
-import express, { Application, Request, Response } from 'express';
-import cors from 'cors';
-import 'dotenv/config';
+import express, { Application, Request, Response } from "express";
+import cors from "cors";
+import "dotenv/config";
+import { UserRoutes } from "./modules/user/user.routes";
 
 const app: Application = express();
 
@@ -9,8 +10,11 @@ app.use(cors());
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 
+// ২. এখানে ইউজার রাউটটি কানেক্ট করুন
+app.use("/api/v1/users", UserRoutes);
+
 // ২. বেস রুট (টেস্ট করার জন্য)
-app.get('/', (req: Request, res: Response) => {
+app.get("/", (req: Request, res: Response) => {
   res.send({
     message: "Welcome to Foodly Backend! 🚀",
   });
@@ -23,7 +27,7 @@ app.use((err: any, req: Request, res: Response, next: any) => {
   res.status(statusCode).json({
     success: false,
     message,
-    stack: process.env.NODE_ENV === 'development' ? err.stack : undefined,
+    stack: process.env.NODE_ENV === "development" ? err.stack : undefined,
   });
 });
 
