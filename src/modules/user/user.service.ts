@@ -1,16 +1,6 @@
 import z from "zod";
 import prisma from "../../lib/prisma";
 import bcrypt from "bcryptjs";
-import { da } from "zod/v4/locales";
-
-//im creating interface to check validation
-// interface CreateUserInputs {
-//   name: string;
-//   email: string;
-//   password: string;
-// }
-
-//creating zod schema to filter out bad upcoming input
 
 export const createUserSchema = z.object({
   name: z.string().min(1, "Enter your name"),
