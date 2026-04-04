@@ -1,7 +1,8 @@
 import { Request, Response } from "express";
-import { createNewUser } from "./user.service";
+import { createNewUser, loginNewUser } from "./user.service";
 import { ZodError } from "zod";
 
+// Register new user
 export const registerUser = async (req: Request, res: Response) => {
   try {
     const { name, email, password } = req.body;
@@ -27,6 +28,24 @@ export const registerUser = async (req: Request, res: Response) => {
     res.status(500).json({
       success: false,
       message: error.message || "Registration failed",
+    });
+  }
+};
+
+//Login old user
+export const loginUser = async (req: Request, res: Response) => {
+  const result = await loginNewUser(req.body);
+
+  try {
+    res.status(201).json({
+      success: true,
+      message: "User login Successful",
+      data: result,
+    });
+  } catch (error: any) {
+    res.status(500).json({
+      success: false,
+      message: error.message || "Login failed",
     });
   }
 };

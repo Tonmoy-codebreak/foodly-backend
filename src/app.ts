@@ -11,7 +11,7 @@ app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 
 // ২. এখানে ইউজার রাউটটি কানেক্ট করুন
-app.use("/api/v1/users", UserRoutes);
+app.use("/users", UserRoutes);
 
 // ২. বেস রুট (টেস্ট করার জন্য)
 app.get("/", (req: Request, res: Response) => {
