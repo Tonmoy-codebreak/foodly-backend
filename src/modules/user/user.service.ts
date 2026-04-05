@@ -1,7 +1,7 @@
 import z, { email } from "zod";
 import prisma from "../../lib/prisma";
 import bcrypt from "bcryptjs";
-import { error } from "console";
+import jwt from "jsonwebtoken";
 
 // eikhane amar schema----------------------------------------------
 export const createUserSchema = z.object({
@@ -54,6 +54,26 @@ export const loginNewUser = async (data: LoginUserInputs) => {
     throw new Error("Password is wrong");
   }
 
+  const accessToken = jwt.sign(
+    { userId: user.id, role: user.role }, // Payload
+    process.env.JWT_ACCESS_SECRET as string, // Secret Key
+    { expiresIn: process.env.JWT_ACCESS_EXPIRES_IN as any }, // Options
+  );
+
   const { password: _password, role: _role, ...userWithoutPassword } = user;
-  return userWithoutPassword;
+  return { user: userWithoutPassword, accessToken };
+};
+
+export const userProfileFromDB = async (userId: string) => {
+  const result = await prisma.user.findUnique({
+    where: {
+      id: userId,
+    },
+  });
+
+  if (!result) {
+    throw new Error("User not found!");
+  }
+
+  return result;
 };
